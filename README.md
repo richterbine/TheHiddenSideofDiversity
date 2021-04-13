@@ -1,1 +1,3 @@
 # TheHiddenSideofDiversity
+
+Studies on ecological communities often address patterns of species distribution and abundance, but few consider uncertainty in counts of both species and individuals when computing diversity measures. We evaluated the extent to which imperfect detection may influence patterns of taxonomic, functional and phylogenetic diversity in ecological communities. For this, we employed a hierarchical Bayesian N-mixture model to estimate the true abundance of fruit-feeding butterflies sampled in canopy and understory strata in a subtropical forest. We then developed a tool to calculate how much information is hidden when uncertainty in counts of species and individuals is not considered when estimating diversity.
