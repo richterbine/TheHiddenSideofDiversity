@@ -45,6 +45,6 @@ The `data` folder contains:
 
 1. Raw
     1. *Nymphalidae_tree.txt* - the phylogenetic tree proposed by Chazot et al. 2019.
-    1. *Raw_data_FLONA.xlsx*- the raw data for fruit-feeding butterflies communities sampled at FLONA-SFP.
+    1. *Raw_data_FLONA.xlsx* - the raw data for fruit-feeding butterflies communities sampled at FLONA-SFP.
 
 
