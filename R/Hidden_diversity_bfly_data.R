@@ -339,7 +339,6 @@ ggplot(ts, aes(x = a, y = b, col = stat, shape = as.factor(V4)), size = 3) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightblue") +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "firebrick1")
 ts
-which(ts$V4 == 1)
 
 df.hd <- data.frame(Dobs = c(HD.bfly$SES.PDobs$pd.obs.z, HD.bfly$SES.MPDobs$mpd.obs.z,
                             HD.bfly$SES.FDobs$pd.obs.z, HD.bfly$SES.MFDobs$mpd.obs.z), 
