@@ -78,10 +78,15 @@ simCommNmix <- function (nsites = 300, nreps = 5, nspecies = 40,
       
       N[i, k] <- rpois(1,lambda[i, k])
       
+      mlambda.1 <- exp(beta1[k])
+      mlambda.2 <- exp(beta2[k])
+      
       for (j in 1:nreps) {
         p[i, j, k] <- plogis(alpha1[k] * (1 - g[i]) + alpha2[k] * g[i] +
                                alpha3[k] * cov1.det[i,j] + 
                                alpha4[k] * cov2.det[i,j])
+        mp.1 <- plogis(alpha1[k])
+        mp.2 <- plogis(alpha2[k])
       }
     }
   }
@@ -117,7 +122,8 @@ simCommNmix <- function (nsites = 300, nreps = 5, nspecies = 40,
                                       mu.beta2 = mu.beta2, mu.alpha1 = mu.alpha1, mu.alpha2 = mu.alpha2,
                                       beta1 = beta1, beta2 = beta2, beta3 = beta3,
                                       alpha1 = alpha1, alpha2 = alpha2, alpha3 = alpha3, 
-                                      alpha4 = alpha4, lambda = lambda, p = p, N = N, 
+                                      alpha4 = alpha4, lambda = lambda, mlambda.1 = mlambda.1,
+                                      mlambda.2 = mlambda.2, p = p, mp.1 = mp.1, mp.2 = mp.2, N = N, 
                                       y.all = y.all, y.obs = y.obs, ymax.obs = ymax.obs, 
                                       Ntotal.fs = Ntotal.fs, Ntotal.obs = Ntotal.obs)))
   
