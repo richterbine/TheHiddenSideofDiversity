@@ -1,0 +1,104 @@
+##### HM CONSIDERING ALL SPECIES AND WITHOUT ZERO-INFLATION ####
+# Specify model in JAGS language 
+sink(here::here("R", "Bayesian_models", "Static_Nmixture_P_RE.txt"))
+cat("model
+{
+  # Community priors (with hyperparameters) for species-specific parameters 
+  for(k in 1:nspec){
+    beta.can[k] ~ dnorm(mu.beta.can, tau.beta.can)      # Species-specific random intercept for abundance - canopy
+    beta.und[k] ~ dnorm(mu.beta.und, tau.beta.und)      # Species-specific random intercept for abundance - understory
+    alpha.can[k] ~ dnorm(mu.alpha.can, tau.alpha.can)   # Species-specific random intercept for detectability - canopy
+    alpha.und[k] ~ dnorm(mu.alpha.und, tau.alpha.und)   # Species-specific random intercept for detectability - understory
+    
+    beta1[k] ~ dnorm(mu.beta1, tau.beta1)               # Species-specific random slope for temperature in biologic process
+    alpha1[k] ~ dnorm(mu.alpha1, tau.alpha1)            # Species-specific random slope for sampling process in sampling process
+    alpha2[k] ~ dnorm(mu.alpha2, tau.alpha2)            # Species-specific random slope for temperature in sampling process 
+    
+    for(n in 1:5) {
+      month[n, k] ~ dnorm(0, tau.month)
+    }
+    
+    for(n in 1:6){
+      area[n, k] ~ dnorm(0, tau.area)
+    }
+  }
+  
+  
+  # Hyperpriors for community hyperparameters 
+  # abundance model - intercept
+  mu.beta.can ~ dnorm(0, 0.001)
+  tau.beta.can <- pow(sd.beta.can, -2) 
+  sd.beta.can ~ dunif(0, 10) 
+  
+  mu.beta.und ~ dnorm(0, 0.001)
+  tau.beta.und <- pow(sd.beta.und, -2) 
+  sd.beta.und ~ dunif(0, 10)
+  
+  # abundance model - slope for temperature by sites
+  mu.beta1 ~ dnorm(0, 0.001) 
+  tau.beta1 <- pow(sd.beta1, -2)
+  sd.beta1 ~ dunif(0, 10)
+  
+  # detection model - intercept
+  mu.alpha.can.pre ~ dunif (0, 1) # Detection can have any value between 0 and 1 with equal probability
+  mu.alpha.can <- logit(mu.alpha.can.pre) # Inverse logit – values from -inf to inf as in norm 
+  tau.alpha.can <- pow(sd.alpha.can, -2) 
+  sd.alpha.can ~ dunif(0, 10) 
+  
+  mu.alpha.und.pre ~ dunif(0, 1)
+  mu.alpha.und <- logit(mu.alpha.und.pre)
+  tau.alpha.und <- pow(sd.alpha.und, -2) 
+  sd.alpha.und ~ dunif(0, 10) ## sd
+  
+  # detection model - slope for julian dates
+  mu.alpha1 ~ dnorm(0, 0.001)
+  tau.alpha1 <- pow(sd.alpha1, -2)
+  sd.alpha1 ~ dunif(0, 10)
+  
+  # detection model - slope for temperatures per day
+  mu.alpha2 ~ dnorm(0, 0.001)
+  tau.alpha2 <- pow(sd.alpha2, -2)
+  sd.alpha2 ~ dunif(0, 10)
+  
+  tau.month <- pow(sd.month, -2)
+  sd.month ~ dunif(0, 10)
+  
+  tau.area <- pow(sd.area, -2)
+  sd.area ~ dunif(0, 10)
+  
+  # Ecological model for true abundance (process model) 
+  for(k in 1:nspec) { 
+    for (i in 1:nsite) { 
+      N[i,k] ~ dpois(lambda[i,k])     # latent abundance of each species in each site
+      log(lambda[i,k]) <- beta.can[k] * (1 - Strata[i]) + 
+                          beta.und[k] * Strata[i] + 
+                          beta1[k] * Temp[i] + 
+                          month[Month[i], k] + 
+                          area[Area[i], k]
+    }
+  }
+  
+  # Observation model for replicated counts 
+  for(k in 1:nspec) { 
+    for (i in 1:nsite) { 
+      for (j in 1:nrep) { 
+        yc[i,j,k] ~ dbin(p[i,j,k], N[i,k]) 
+        logit(p[i,j,k]) <- alpha.can[k] * (1 - Strata[i]) + 
+          alpha.und[k] * Strata[i] + 
+          alpha1[k] * Date[i, j] + 
+          alpha2[k] * Temp_det[i, j]
+      }
+    }
+  }
+  
+  # Other derived quantities 
+  for(k in 1:nspec) {
+    mlambda.can[k] <- exp(beta.can[k])    # Expected abundance on natural scale for canopy
+    mlambda.und[k] <- exp(beta.und[k])    # Expected abundance on natural scale for understory
+    logit(mp.can[k]) <- alpha.can[k]      # Mean detection on natural scale for canopy
+    logit(mp.und[k]) <- alpha.und[k]      # Mean detection on natural scale for understory
+  }
+  
+}
+    ",fill = TRUE)
+sink()
