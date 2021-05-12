@@ -48,52 +48,51 @@ for (j in 1:length(list_mean_sd)) {
   
 }
 
-list_mean_sd$sesPD.est$mean
-list_mean_sd$sesMPD.est$mean
-list_mean_sd$sesMPDi.est$mean
-list_mean_sd$sesFD.est$mean
-list_mean_sd$sesMFD.est$mean
-list_mean_sd$sesMFDi.est$mean
+# given low values to NAs for observed diversity
+HD.bfly$SES.PDobs[which(is.na(HD.bfly$SES.PDobs$pd.obs.z)), "pd.obs.z"] <- 1e-05
 
+HD.bfly$SES.FDobs[which(is.na(HD.bfly$SES.FDobs$pd.obs.z)), "pd.obs.z"] <- 1e-05
 
+HD.bfly$SES.MPDobs[which(is.na(HD.bfly$SES.MPDobs$mpd.obs.z)), "mpd.obs.z"] <- 1e-05
 
+HD.bfly$SES.MPDiobs[which(is.na(HD.bfly$SES.MPDiobs$mpd.obs.z)), "mpd.obs.z"] <- 1e-05
 
+HD.bfly$SES.MFDobs[which(is.na(HD.bfly$SES.MFDobs$mpd.obs.z)), "mpd.obs.z"] <- 1e-05
 
+HD.bfly$SES.MFDiobs[which(is.na(HD.bfly$SES.MFDiobs$mpd.obs.z)), "mpd.obs.z"] <- 1e-05
 
-HD.bfly$SES.PDobs[which(is.na(HD.bfly$SES.PDobs$pd.obs.z)), "pd.obs.z"] <- 0
+# calculating the hidden diversity (d.obs - d.est)/sd.est
 
-HD.bfly$SES.FDobs[which(is.na(HD.bfly$SES.FDobs$pd.obs.z)), "pd.obs.z"] <- 0
+res.HD.bfly <- data.frame(H.TD = (HD.bfly$SES.PDobs$ntaxa - list_mean_sd$sesPD.est$mean[,"ntaxa"])/list_mean_sd$sesPD.est$sd[,"ntaxa"],
+                          H.PD = (HD.bfly$SES.PDobs$pd.obs.z - list_mean_sd$sesPD.est$mean[,"pd.obs.z"])/list_mean_sd$sesPD.est$sd[,"pd.obs.z"],
+                          H.FD = (HD.bfly$SES.FDobs$pd.obs.z - list_mean_sd$sesFD.est$mean[,"pd.obs.z"])/list_mean_sd$sesFD.est$sd[,"pd.obs.z"],
+                          H.MPDi = (HD.bfly$SES.MPDiobs$mpd.obs.z - list_mean_sd$sesMPDi.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMPDi.est$sd[,"mpd.obs.z"],
+                          H.MPD = (HD.bfly$SES.MPDobs$mpd.obs.z - list_mean_sd$sesMPD.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMPD.est$sd[,"mpd.obs.z"],
+                          H.MFDi = (HD.bfly$SES.MFDiobs$mpd.obs.z - list_mean_sd$sesMFDi.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMFDi.est$sd[,"mpd.obs.z"],
+                          H.MFD = (HD.bfly$SES.MFDobs$mpd.obs.z - list_mean_sd$sesMFD.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMFD.est$sd[,"mpd.obs.z"])
+res.HD.bfly$Strata <- ifelse(substr(rownames(res.HD.bfly), 1, 1) == "C", "Canopy", 
+                              "Understory")
 
-HD.bfly$SES.MPDobs[which(is.na(HD.bfly$SES.MPDobs$mpd.obs.z)), "mpd.obs.z"] <- 0
-
-HD.bfly$SES.MPDiest[which(is.na(HD.bfly$SES.MPDiest$mpd.obs.z)), "mpd.obs.z"] <- 0
-
-HD.bfly$SES.MFDobs[which(is.na(HD.bfly$SES.MFDobs$mpd.obs.z)), "mpd.obs.z"] <- 0
-
-
-res.HD.bfly <- data.frame(H.TD = (HD.bfly[[5]]$ntaxa - list_mean_sd$sesPD.est$mean[,"ntaxa"])/list_mean_sd$sesPD.est$sd[,"ntaxa"],
-                          H.PD = (HD.bfly[[5]]$pd.obs.z - list_mean_sd$sesPD.est$mean[,"pd.obs.z"])/list_mean_sd$sesPD.est$sd[,"pd.obs.z"],
-                          H.FD = (HD.bfly[[7]]$pd.obs.z - list_mean_sd$sesFD.est$mean[,"pd.obs.z"])/list_mean_sd$sesFD.est$sd[,"pd.obs.z"],
-                          H.MPD = (HD.bfly[[6]]$mpd.obs.z - list_mean_sd$sesMPD.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMPD.est$sd[,"mpd.obs.z"],
-                          H.MFD = (HD.bfly[[8]]$mpd.obs.z - list_mean_sd$sesMFD.est$mean[,"mpd.obs.z"])/list_mean_sd$sesMFD.est$sd[,"mpd.obs.z"])
-res.HD.bfly$Strata <- substr(rownames(res.HD.bfly), 1, 1)
-res.HD.bfly$Stratum <- factor(res.HD.bfly$Strata, labels = c("Canopy", "Understory"))
-
+# converting in a data frame
 df.hd <- data.frame(HD.values = c(res.HD.bfly$H.TD, res.HD.bfly$H.PD, res.HD.bfly$H.FD,
-                                  res.HD.bfly$H.MPD, res.HD.bfly$H.MFD), 
-                    Div.names = rep(colnames(res.HD.bfly[, 1:5]), each = nrow(res.HD.bfly),1),
-                    Strata = rep(res.HD.bfly$Stratum), each = nrow(res.HD.bfly), 1)
+                                  res.HD.bfly$H.MPDi, res.HD.bfly$H.MPD, 
+                                  res.HD.bfly$H.MFDi, res.HD.bfly$H.MFD), 
+                    Div.names = rep(colnames(res.HD.bfly[, 1:7]), each = nrow(res.HD.bfly)),
+                    Strata = rep(res.HD.bfly$Stratum, 7))
+df.hd$Div.names1 <- factor(df.hd$Div.names, levels = c("H.TD", "H.PD", "H.FD",
+                                                       "H.MPDi", "H.MFDi", "H.MPD", "H.MFD"))
 
 library(ggplot2)
 library(viridis)
 
-p.hd <- ggplot(data = df.hd, aes(y = HD.values, x = Div.names,
+p.hd <- ggplot(data = df.hd, aes(y = HD.values, x = Div.names1,
                                  colour = Strata, fill = Strata)) +
   geom_boxplot() + scale_color_viridis_d(option = "A") +
   scale_fill_viridis_d(option = "A", alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = 2, color = "firebrick1")
-
+  geom_hline(yintercept = 0, linetype = 2, color = "firebrick1") +
+  labs(x = "Diversity Measures", y = "Hidden Diversity") 
 p.hd
+
 cowplot::save_plot(here::here("output", "figures", "Fig1_hdbfly.png"), p.hd,
                    base_width = 8)
 
@@ -104,8 +103,21 @@ summary(mod.td)
 mod.pd <- lm(res.HD.bfly$H.PD ~ res.HD.bfly$Strata)
 summary(mod.pd)
 
+mod.pd1 <- lm(HD.bfly$SES.PDobs$pd.obs.z ~ list_mean_sd$sesPD.est$mean[,6])
+summary(mod.pd1)
+
+plot(HD.bfly$SES.PDobs$pd.obs.z ~ list_mean_sd$sesPD.est$mean[,6])
+abline(a = coef(mod.pd1)[1], b = coef(mod.pd1)[2])
+abline(a = 0, b = 1, col = "red")
+
 mod.fd <- lm(res.HD.bfly$H.FD ~ res.HD.bfly$Strata)
 summary(mod.fd)
+
+mod.mpdi <- lm(res.HD.bfly$H.MPDi ~ res.HD.bfly$Strata)
+summary(mod.mpdi)
+
+mod.mfdi <- lm(res.HD.bfly$H.MFDi ~ res.HD.bfly$Strata)
+summary(mod.mfdi)
 
 mod.mpd <- lm(res.HD.bfly$H.MPD ~ res.HD.bfly$Strata)
 summary(mod.mpd)
@@ -114,11 +126,14 @@ mod.mfd <- lm(res.HD.bfly$H.MFD ~ res.HD.bfly$Strata)
 summary(mod.mfd)
 
 out.lm <- rbind(summary(mod.td)[[4]], summary(mod.pd)[[4]],
-                summary(mod.fd)[[4]], summary(mod.mpd)[[4]],
+                summary(mod.fd)[[4]], summary(mod.mpdi)[[4]],
+                summary(mod.mpd)[[4]], summary(mod.mfdi)[[4]],
                 summary(mod.mfd)[[4]])
+rownames(out.lm) <- rep(colnames(res.HD.bfly[, 1:7]), each = 2)
 
+round(out.lm, 3)
 
-# correlation among td and pd/fd
+# correlation between TD and SES.PD/FD
 mod.td.pd <- lm(res.HD.bfly$H.TD ~ res.HD.bfly$H.PD)
 summary(mod.td.pd)
 cor.test(res.HD.bfly$H.TD, res.HD.bfly$H.PD)
@@ -135,79 +150,89 @@ out.cor <- rbind(summary(mod.td.pd)[[4]], summary(mod.td.fd)[[4]])
 
 
 
-HD.bfly <- readRDS(here::here("output", "HD_bfly.rds"))
+# visualization of the hidden diversity in another way --------------------
 
-bfly.obs.mpd <- HD.bfly$SES.MPDobs
+df.HD <- data.frame(D.obs = c(HD.bfly$SES.PDobs$ntaxa, HD.bfly$SES.PDobs$pd.obs.z, HD.bfly$SES.FDobs$pd.obs.z,
+                              HD.bfly$SES.MPDiobs$mpd.obs.z, HD.bfly$SES.MFDiobs$mpd.obs.z,
+                              HD.bfly$SES.MPDobs$mpd.obs.z, HD.bfly$SES.MFDobs$mpd.obs.z),
+                    D.est = c(list_mean_sd$sesPD.est$mean[,1], list_mean_sd$sesPD.est$mean[,6],
+                              list_mean_sd$sesFD.est$mean[,6], list_mean_sd$sesMPDi.est$mean[,6],
+                              list_mean_sd$sesMFDi.est$mean[,6], list_mean_sd$sesMPD.est$mean[,6],
+                              list_mean_sd$sesMFD.est$mean[,6]), 
+                    SD.est = c(list_mean_sd$sesPD.est$sd[,1], list_mean_sd$sesPD.est$sd[,6],
+                               list_mean_sd$sesFD.est$sd[,6], list_mean_sd$sesMPDi.est$sd[,6],
+                               list_mean_sd$sesMFDi.est$sd[,6], list_mean_sd$sesMPD.est$sd[,6],
+                               list_mean_sd$sesMFD.est$sd[,6]),
+                    Div.name = rep(c("SES.TD","SES.PD", "SES.FD", "SES.MPDi", "SES.MFDi",
+                                     "SES.MPD", "SES.MFD"), each = nrow(HD.bfly$SES.PDobs)), 
+                    Strata = rep(substr(rownames(HD.bfly$SES.PDobs),1,1), 7))
+df.HD$Strata <- ifelse(df.HD$Strata == "C", "Canopy", "Understory") 
+df.HD$HD <- (df.HD$D.obs - df.HD$D.est)/df.HD$SD.est
+df.HD$Div.name <- factor(df.HD$Div.name, levels = c("SES.TD","SES.PD", "SES.FD", "SES.MPDi", "SES.MFDi",
+                                                    "SES.MPD", "SES.MFD"))
 
-bfly.obs.mpd$strata <- substr(rownames(bfly.obs.mpd), 1, 1)
-bfly.obs.mpd <- na.omit(bfly.obs.mpd)
-
-summary(lm(mpd.obs.z ~ strata, data = bfly.obs.mpd))
-boxplot(bfly.obs.mpd$mpd.obs.z ~ bfly.obs.mpd$strata)
-
-colnames(HD.bfly$SES.MPDobs) <- colnames(HD.bfly$SES.MFDobs) <- colnames(HD.bfly$SES.PDobs)
-
-df.obs.div <- rbind(HD.bfly$SES.PDobs, HD.bfly$SES.FDobs, 
-                    HD.bfly$SES.MPDobs, HD.bfly$SES.MFDobs)
-
-df.obs.div$strata <- substr(rownames(df.obs.div), 1, 1)
-df.obs.div$div <- rep(names(HD.bfly)[5:8], each = nrow(HD.bfly$SES.PDobs))
-
-p.div.obd <- ggplot(data = na.omit(df.obs.div), aes(y = pd.obs.z, x = div,
-                                                    colour = strata, fill = strata)) +
-  geom_boxplot() + scale_color_viridis_d(option = "A") +
-  scale_fill_viridis_d(option = "A", alpha = 0.7) +
-  geom_hline(yintercept = 0, linetype = 2, color = "firebrick1")
-p.div.obd
-
-cowplot::plot_grid(p.hd, p.div.obd)
-
-
-length(na.omit(HD.bfly[[5]]$pd.obs.z - list_mean_sd$sesPD.est$mean[,"pd.obs.z"]))
-
-a = rnorm(100)
-b = rnorm(100)
-ts <- as.data.frame(cbind(a, b, a-b, a < b, a < 0, b < 0))
-ts$stat <- ifelse(ts$V5 == 0 & ts$V6 == 0, "pos-pos",
-                  ifelse(ts$V5 == 0 & ts$V6 == 1, "pos-neg",
-                         ifelse(ts$V5 == 1 & ts$V6 == 0, "neg-pos", 
-                                ifelse(ts$V5 == 1 & ts$V6 == 1, "neg-neg", NA))))
-ts$hd <- factor(ts$V4, labels = c("HD.pos", "HD.neg"))
-
-
-ggplot(ts, aes(x = a, y = b, col = stat, shape = hd), size = 3) +
-  geom_point() +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "lightblue") +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightblue") +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "firebrick1")
-ts
-
-df.hd <- data.frame(Dobs = c(HD.bfly$SES.PDobs$pd.obs.z, HD.bfly$SES.MPDiobs$mpd.obs.z,
-                             HD.bfly$SES.MPDobs$mpd.obs.z, HD.bfly$SES.FDobs$pd.obs.z, 
-                             HD.bfly$SES.MFDiobs$mpd.obs.z, HD.bfly$SES.MFDobs$mpd.obs.z), 
-                    Dest = c(list_mean_sd$sesPD.est$mean[,"pd.obs.z"], 
-                             list_mean_sd$sesMPDi.est$mean[,"mpd.obs.z"],
-                             list_mean_sd$sesMPD.est$mean[,"mpd.obs.z"], 
-                             list_mean_sd$sesFD.est$mean[,"pd.obs.z"],
-                             list_mean_sd$sesMFDi.est$mean[,"mpd.obs.z"],
-                             list_mean_sd$sesMFD.est$mean[,"mpd.obs.z"]),
-                    Type = rep(c("SES.PD", "SES.MPDi", "SES.MPD", "SES.FD", "SES.MFDi", "SES.MFD"), 
-                               each = nrow(HD.bfly$SES.PDobs)),
-                    Strata = rep(c("Canopy", "Undestory"), each = 150))
-
-
-ggplot(df.hd, aes(x = Dobs, y = Dest, colour = Type), alpha, .5, size = 4) +
-  geom_point() + scale_color_viridis_d(option = "A") +
+p.obs_est <- ggplot(df.HD, aes(x = D.est, y = D.obs, colour = Strata), alpha, .5, size = 4) +
+  geom_point(alpha = .5) + scale_color_viridis_d(option = "A") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "lightblue") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "lightblue") +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "firebrick1") +
-  facet_wrap(~Strata)
+  facet_wrap(~ Div.name, scales = "free") + theme(legend.position = "none")
+p.obs_est
 
-ggplot(df.hd, aes(x = Dobs, y = Dest, colour = Strata), alpha, .5, size = 4) +
-  geom_point() + scale_color_viridis_d(option = "A") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "lightblue") +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "lightblue") +
-  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "firebrick1") +
-  facet_wrap(~Type)
+p.hd <- ggplot(df.HD, aes(x = Div.name, y = (HD*-1), colour = Strata, fill = Strata)) +
+  geom_boxplot(alpha = .5) + facet_wrap(~ Div.name, nrow = 1, scales = "free_x") +
+  scale_color_viridis_d(option = "A") + scale_fill_viridis_d(option = "A") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "firebrick1") +
+  theme(legend.position = "none")
+
+plot1 <- cowplot::plot_grid(p.obs_est, p.hd, ncol = 1)
+cowplot::save_plot(here::here("output", "figures", "Figx_HD.png"),
+                   plot1, base_width = 10, base_height = 6)
 
 
+
+# Testing if the Estimated Diversity can predict the observed diversity --------
+
+mod1 <- lm(HD.bfly$SES.PDobs$ntaxa ~ list_mean_sd$sesPD.est$mean[,1])
+summary(mod1)
+residuals(mod1)
+
+mod2 <- lm(HD.bfly$SES.FDobs$pd.obs.z ~ list_mean_sd$sesFD.est$mean[,6])
+summary(mod2)
+residuals(mod2)
+cor.test(residuals(mod2), res.HD.bfly$H.FD)
+
+mod3 <- lm(HD.bfly$SES.MPDiobs$mpd.obs.z ~ list_mean_sd$sesMPDi.est$mean[,6])
+summary(mod3)
+cor.test(residuals(mod3), res.HD.bfly$H.MPDi)
+
+mod4 <- lm(HD.bfly$SES.MPDobs$mpd.obs.z ~ list_mean_sd$sesMPD.est$mean[,6])
+summary(mod4)
+cor.test(residuals(mod4), res.HD.bfly$H.MPD)
+
+mod5 <- lm(HD.bfly$SES.MFDiobs$mpd.obs.z ~ list_mean_sd$sesMFDi.est$mean[,6])
+summary(mod5)
+cor.test(residuals(mod5), res.HD.bfly$H.MFDi)
+
+mod6 <- lm(HD.bfly$SES.MFDobs$mpd.obs.z ~ list_mean_sd$sesMFD.est$mean[,6])
+summary(mod6)
+cor.test(residuals(mod6), res.HD.bfly$H.MFD)
+plot(residuals(mod6), res.HD.bfly$H.MFD)
+
+
+
+obs.pd <- HD.bfly$SES.PDobs[,6]
+est.pd <- list_mean_sd$sesPD.est$mean[,6]
+
+sum(obs.pd > est.pd)
+ts.o <- obs.pd[which(obs.pd < est.pd)]
+ts.e <- est.pd[which(obs.pd < est.pd)]
+
+plot(ts.e, ts.o)  
+abline(a = 0, b = 1)
+a = 0
+b = 1
+ts.e.pred <- (a + b*ts.e)
+which(max(ts.o - ts.e.pred) == ts.o - ts.e.pred)
+
+res.HD.bfly[which(rownames(res.HD.bfly) == "C2NF5D"),]
