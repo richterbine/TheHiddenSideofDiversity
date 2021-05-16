@@ -98,14 +98,10 @@ p.hd <- ggplot(data = df.hd, aes(y = HD.values, x = Div.names1,
   facet_wrap(~Div.names1)
 p.hd
 
-cowplot::save_plot(here::here("output", "figures", "Fig1_hdbfly.png"), p.hd,
-                   base_width = 8)
-
 # testing if the HD differs between strata
 library(lme4)
 library(lmerTest)
 
-str(res.HD.bfly)
 mod.td <- lmer(H.TD ~ Strata + (1|Month)  + (1|SU), data = res.HD.bfly)
 summary(mod.td)
 
@@ -140,6 +136,7 @@ write.table(out.lmer, here::here("output", "mod_lmer.txt"))
 
 
 # visualization of the hidden diversity in another way --------------------
+# hidden diversity framework #
 
 df.HD <- data.frame(D.obs = c(HD.bfly$SES.PDobs$ntaxa, HD.bfly$SES.PDobs$pd.obs.z, HD.bfly$SES.FDobs$pd.obs.z,
                               HD.bfly$SES.MPDiobs$mpd.obs.z, HD.bfly$SES.MFDiobs$mpd.obs.z,
@@ -206,5 +203,3 @@ plot1
 
 cowplot::save_plot(here::here("output", "figures", "Fig3_HD.png"),
                    plot1, base_width = 10, base_height = 6)
-
-

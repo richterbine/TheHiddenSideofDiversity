@@ -141,7 +141,7 @@ legAF <- cowplot::get_legend(p.A_F + theme(legend.position = "bottom"))
 SetAF <- cowplot::plot_grid(p.A_F, p.A_F.sd, legAF,
                             ncol = 1,
                             rel_heights = c(2, 2, 1))
-cowplot::save_plot(here::here("output", "figures", "FigS2_hyperparams.png"),
+cowplot::save_plot(here::here("output", "figures", "FigS3_hyperparams.png"),
                    SetAF, base_height = 6, base_width = 8)
 
 # Model setting: G to L
@@ -160,8 +160,8 @@ p.G_L <- ggplot(e.set.m, aes(x = values, colour = set.code, fill = set.code)) +
   facet_wrap(~ params.2 , labeller = label_parsed, nrow = 1) +
   geom_vline(data = r.set.m, aes(xintercept = p.trans, colour = set.code), 
              linetype = "dashed") + theme(legend.position = "none") +
-  scale_color_viridis_d(option = "B", name = "Setting code") +
-  scale_fill_viridis_d(option = "B", name = "Setting code") +
+  scale_color_viridis_d(option = "A", name = "Setting code") +
+  scale_fill_viridis_d(option = "A", name = "Setting code") +
   labs(x = "Estimated mean values" , y = "Density", tag = "a)")
 p.G_L
 
@@ -170,8 +170,8 @@ p.G_L.sd <- ggplot(e.set.sd, aes(x = values, colour = set.code, fill = set.code)
   facet_wrap(~ params.2 , labeller = label_parsed, nrow = 1) +
   geom_vline(data = r.set.sd, aes(xintercept = p.trans, colour = set.code), 
              linetype = "dashed") + theme(legend.position = "none") +
-  scale_color_viridis_d(option = "B", name = "Setting code") +
-  scale_fill_viridis_d(option = "B", name = "Setting code") +
+  scale_color_viridis_d(option = "A", name = "Setting code") +
+  scale_fill_viridis_d(option = "A", name = "Setting code") +
   labs(x = "Estimated SD values" , y = "Density", tag = "b)")
 p.G_L.sd
 
@@ -181,7 +181,7 @@ legGL <- cowplot::get_legend(p.G_L + theme(legend.position = "bottom"))
 SetGL <- cowplot::plot_grid(p.G_L, p.G_L.sd, legGL,
                              ncol = 1, rel_heights = c(2, 2, 1))
 
-cowplot::save_plot(here::here("output", "figures", "FigS3_hyperparams.png"), 
+cowplot::save_plot(here::here("output", "figures", "FigS4_hyperparams.png"), 
                    SetGL, base_height = 6, base_width = 8)
 
 
@@ -370,6 +370,6 @@ Mean_Community_params <- cowplot::plot_grid(p.joint, legs,
                                             ncol = 1)
 Mean_Community_params
 
-cowplot::save_plot(here::here("output", "figures", "FigS4_meanCparams.png"), 
+cowplot::save_plot(here::here("output", "figures", "FigS1_meanCparams.png"), 
                    Mean_Community_params,
                    base_height = 8)
