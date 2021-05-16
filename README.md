@@ -42,8 +42,8 @@ The `output` folder contains:
     
 1. *out.mod.bfly.rds* - the bayesian model output with empirical data.
 1. *fitjags.mod.bfly.rds* - output for the basic.jags model, with the MCMC for true abundance matrix.
-1. *joint_bfly_data.txt* - data frame with merged data for temperature and species counts of the empirical dataset.
 2. *HD_bfly.rds* - output with 100 estimated values for each diversity measure + diversity values calculated with observed data.
+1. *joint_bfly_data.txt* - data frame with merged data for temperature and species counts of the empirical dataset.
 3. *tree_bfly_FLONA.txt* - the pruned phylogenetic tree for the empirical dataset.
 4. *tree.func_bfly_FLONA.txt* - the functional dendrogram based on similarity of functional traits among species.
 5. *mod_lmer.txt* - output with intercepts and slopes for linear mixed models between HD and strata (canopy x undesrtory).
