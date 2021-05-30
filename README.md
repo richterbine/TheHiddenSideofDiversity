@@ -31,15 +31,16 @@ The `R` folder contains.
 The `output` folder contains:
 
 1. figures
-    1. *Fig1_HD_framework.png* - Figure 1 main text.
+    1. *Fig1_Squematic_framework.png* - Figure 1 main text.
     1. *Fig2_meanC.png* - Figure 2 main text.
-    2. *Fig3_HD.png* - Figure 3 main text.
-    3. *FigS1_meanCparams.png* - Supplementary material Figure S1.
-    4. *FigS2_sdCparams.png* - Supplementary material Figure S2.
-    5. *FigS3_A-F_hyperparams.png* - Supplementary material Figure S3.
-    6. *FigS4_G-L_hyperparams.png* - Supplementary material Figure S4.
-    7. *FigS5_meanSparams.png* - Supplementary material Figure S5.
-    8. *FigS6_pattern_obs-est.png* - Supplementary material Figure S6.
+    2. *Fig3_HD_bfly.png* - Figure 3 main text.
+    4. *FigA1_meanCparams.png* - Appendix A - Figure A1.
+    3. *FigA2_A-F_hyperparams.png* - Appendix A - Figure A2.
+    4. *FigA3_G-L_hyperparams.png* - Appendix A - Figure A3.
+    5. *FigB1_Csd.png* - Appendix B - Figure B1.
+    6. *FigB2_Smean.png* - Appendix B - Figure B2.
+    7. *FigC3_obs_est.png* - Appendix C - Figure C1.
+    
     
 1. *out.mod.bfly.rds* - the bayesian model output with empirical data.
 1. *fitjags.mod.bfly.rds* - output for the basic.jags model, with the MCMC for true abundance matrix.
