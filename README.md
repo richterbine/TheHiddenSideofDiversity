@@ -14,7 +14,7 @@ The `R` folder contains.
    1. *D_Model_validation.R* -  script to generate the simulated communities and perform the bayesian model.
    1. *S_Model_sim_evaluation.R* - script to evaluate ability of the bayesian model in found the real parameters.
    1. *Comm_simulated.rds* - the simulated communities used to run the bayesian model.
-   1. *model_comm_simulated.rds* - output of the model for each simulated community. 
+   1. *model_comm_simulated.rds* - output of the model for each simulated community.
 
 1. functions 
     1. *hidden_diversity_function.R* - function to calculate the hidden diversity for each diversity measures. 
@@ -26,6 +26,7 @@ The `R` folder contains.
 1. *D_S_Model_bfly_data.R* - script to run the bayesian model with the empirical dataset (fruit-feeding butterflies community sampled at FLONA-SFP between 2016 and 2017).
 1. *D_Hidden_diversity_bfly_data.R* - script to perform the hidden diversity for the empirical dataset.
 2. *S_HD_bfly.R* - script to plot and analyse the hidden diversity framework.
+3. *D_lmer_obs-est.R* - script run the LMER model for observed and estimated diversity (Table C1)
 
 The `output` folder contains:
 
@@ -47,6 +48,8 @@ The `output` folder contains:
 3. *tree_bfly_FLONA.txt* - the pruned phylogenetic tree for the empirical dataset.
 4. *tree.func_bfly_FLONA.txt* - the functional dendrogram based on similarity of functional traits among species.
 5. *mod_lmer.txt* - output with intercepts and slopes for linear mixed models between HD and strata (canopy x undesrtory).
+6. *mod_obs_lmer.txt* - output of LMER model between observed diversity and strata.
+7. *mod_est_lmer.txt* - output of LMER model between estimated diversity and strata.
 
 The `data` folder contains:
 1. processed
