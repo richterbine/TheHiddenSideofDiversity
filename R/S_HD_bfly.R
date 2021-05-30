@@ -47,6 +47,8 @@ for (j in 1:length(list_mean_sd)) {
   
 }
 
+saveRDS(list_mean_sd, here::here("output", "mean_estimated_diversity.rds"))
+
 # given low values to NAs for observed diversity
 HD.bfly$SES.PDobs[which(is.na(HD.bfly$SES.PDobs$pd.obs.z)), "pd.obs.z"] <- 1e-05
 
@@ -186,7 +188,7 @@ p.div.pat1 <- ggplot(df.HD, aes(x = Div.name, y = D.est, colour = Strata, fill =
   theme(legend.position = "none")
 p.div.pat1
 
-cowplot::save_plot(here::here("output","figures", "Fig.S3_obs_est.png"),
+cowplot::save_plot(here::here("output","figures", "FigC3_obs_est.png"),
                    cowplot::plot_grid(p.div.pat, p.div.pat1),
                    base_width = 10)
 
@@ -195,11 +197,13 @@ p.hd <- ggplot(df.HD, aes(x = Div.name, y = HD, colour = Strata, fill = Strata))
   geom_boxplot(alpha = .5) + facet_wrap(~ Div.name, nrow = 1, scales = "free_x") +
   scale_color_viridis_d(option = "A") + scale_fill_viridis_d(option = "A") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "firebrick1") +
-  theme(legend.position = "none") + labs(y = "Hidden Diversity", tag = "a)")
+  theme(legend.position = "none", 
+        axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+  labs(y = "Hidden Diversity", tag = "a)", x = "Diversity measures")
 p.hd
 
 plot1 <- cowplot::plot_grid(p.hd, p.obs_est,  ncol = 1)
 plot1
 
-cowplot::save_plot(here::here("output", "figures", "Fig3_HD.png"),
+cowplot::save_plot(here::here("output", "figures", "Fig3_HD_bfly.png"),
                    plot1, base_width = 10, base_height = 6)

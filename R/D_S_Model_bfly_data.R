@@ -185,7 +185,6 @@ df <- data.frame(Strata = c(rep("Canopy", each = 10^5), rep("Understory", each =
 # Plotting the community-mean abundance
 mean <- c(mean(n.sample), mean(nu.sample), mean(p.sample), mean(pu.sample))
 
-
 n <- ggplot(df, aes(x = Abundance, color = Strata, fill = Strata)) + 
   geom_density(alpha = 0.5, position = "identity") +
   geom_vline(data = ddply(df, "Strata", summarise, grp.mean = mean(Abundance)), aes(xintercept = grp.mean, color = Strata),
@@ -264,8 +263,9 @@ sd.plot <- sd.plot + geom_vline(data = mean.sd,
                                 aes(xintercept = mean, color = params),
                                 linetype = "dashed") +
   facet_wrap(~proc.type) + labs(x = "Estimated SD values", y = "Density")
+sd.plot
 
-cowplot::save_plot(here::here("output", "figures", "FigS5_Csd.png"),
+cowplot::save_plot(here::here("output", "figures", "FigB1_Csd.png"),
                    sd.plot, base_width = 8)
 
 
@@ -307,7 +307,7 @@ spp.plot <- ggplot(df.spp, aes(x = Mean, y = Spp, colour = Spp)) +
   scale_color_viridis_d(option = "A")
 spp.plot
 
-cowplot::save_plot(here::here("output", "figures", "Figs6_Smean.png"),
+cowplot::save_plot(here::here("output", "figures", "FigB2_Smean.png"),
                    spp.plot, base_width = 10, base_height = 9)
 
 
