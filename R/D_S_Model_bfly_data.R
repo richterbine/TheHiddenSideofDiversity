@@ -131,15 +131,6 @@ bfly.mod.basic <- jags.basic(data = win.data, inits = inits, parameters.to.save 
 
 saveRDS(bfly.mod.basic, here::here("output", "fitjags.mod.bfly.rds"))
 
-
-# ################################################################ --------
-library(plyr)
-library(ggplot2)
-
-# read the outputs for N-mixture model
-bfly.mod <- readRDS(here::here("output", "out.mod.bfly.rds"))
-bfly.mod.basic <- readRDS(here::here("output",'fitjags.mod.bfly.rds'))
-
 # traceplots for each parameters
 #par(mfrow = c(1, 2))
 traceplot(bfly.mod.basic[, 10501:10535]) # trace for alpha.can
@@ -149,6 +140,15 @@ traceplot(bfly.mod.basic[, 10606:10640]) # trace for alpha2
 traceplot(bfly.mod.basic[, 10641:10675]) # trace for beta.can
 traceplot(bfly.mod.basic[, 10676:10710]) # trace for beta.und
 traceplot(bfly.mod.basic[, 10711:10745]) # trace for beta1
+
+
+# ################################################################ --------
+library(plyr)
+library(ggplot2)
+
+# read the outputs for N-mixture model
+bfly.mod <- readRDS(here::here("output", "out.mod.bfly.rds"))
+bfly.mod.basic <- readRDS(here::here("output",'fitjags.mod.bfly.rds'))
 
 params.est <- c("mu.beta.can", "sd.beta.can", "mu.beta.und", "sd.beta.und",
                 "mu.beta1", "sd.beta1", "mu.alpha.can", "sd.alpha.can",
@@ -212,11 +212,16 @@ p <- ggplot(df, aes(x = Detection, color = Strata, fill = Strata)) +
            parse = T)
 p
 
+### the values printed in the plot can differ from values showed in the figure of ms,
+### due randomization of the mean values, however, this values should be among the CR interval
+
 cowplot::plot_grid(n, p)
 cowplot::save_plot(here::here("output", "figures", "Fig2_meanC.png"), 
                    cowplot::plot_grid(n, p), base_width = 8)
 
-### Inter-specific variability - species heterogeneity
+
+# Inter-specific variability - species heterogeneity ----------------------
+
 params <- params.est[c(2,4,6,8,10,12,14:16)]
 tmp.sd <- matrix(NA, ncol = length(params), nrow = length(bfly.mod$sims.list$sd.beta.can))
 colnames(tmp.sd) <- params
@@ -233,6 +238,7 @@ df.sd$proc.type <- ifelse(t == "beta", "Biological",
                           ifelse(t == "alpha", "Observational", 
                                  "Biological"))
 
+# how much species varies around mean 
 
 sd.plot <- ggplot(data = df.sd, aes(x = values, colour = params, fill = params)) + 
   geom_density(alpha = 0.5) + 
@@ -298,6 +304,8 @@ df.spp$params <- factor(df.spp$params, labels = c(expression(alpha[can]),
                                                   expression(beta[can]),
                                                   expression(beta[und]),
                                                   expression(beta[1])))
+
+## plot to visualize the specie-specific response to predictor variables
 
 spp.plot <- ggplot(df.spp, aes(x = Mean, y = Spp, colour = Spp)) +
   geom_point() + geom_errorbar(aes(xmin = q2.5, xmax = q97.5), width = 0.1) +

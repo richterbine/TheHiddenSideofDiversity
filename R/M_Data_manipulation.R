@@ -5,7 +5,7 @@
 
 # improvements of the bayesian model --------------------------------------
 # correction of priors for detection parameters, inclusion of sampling days 
-# in the model (data matrix - StrataXtrapXday) and random effects for month and area
+# in the model (data matrix - Strata X trap X day) and random effects for month and area
 
 #### packages ####
 library(jagsUI)

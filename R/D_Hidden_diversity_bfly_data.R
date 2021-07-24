@@ -35,7 +35,7 @@ for(j in 1:nsamp){
   N[,,j] <- bfly.N[j, 1:(nsite*nspec)]
 }
 
-comm.bfly.est <- N[, , sample(1:dim(N)[3], 100)]
+comm.bfly.est <- N[, , sample(1:dim(N)[3], 10)]
 dimnames(comm.bfly.est) <- list(rownames(comm.bfly.obs), colnames(comm.bfly.obs), NULL)
 str(comm.bfly.est)
 
