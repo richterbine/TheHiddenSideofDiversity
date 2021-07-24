@@ -20,14 +20,14 @@ The `R` folder contains.
 
 1. functions 
     1. *hidden_diversity_function.R* - function to calculate the hidden diversity for each diversity measures. 
-    2. *hidden_diversity_parallel.R* - function parallelized, a faster version of hidden diversity (in construction).
+    2. *hidden_diversity_parallel.R* - function parallelized, a faster version of hidden diversity (recomendable).
     3. *simCommNmix_function.R* - fucntion to generate communities, accounting with the imperfect detection.
     4. *genus_to_spp_function.R* - function to manipulated and prune a phylogenetic tree to a specific species pool.
 
 1. *M_Data_manipulations.R* - script to read the community data observed, the phylogenetic tree and the traits matrix.
 1. *D_S_Model_bfly_data.R* - script to run the bayesian model with the empirical dataset (fruit-feeding butterflies community sampled at FLONA-SFP between 2016 and 2017).
 1. *D_Hidden_diversity_bfly_data.R* - script to perform the hidden diversity for the empirical dataset.
-2. *S_HD_bfly.R* - script to plot and analyse the hidden diversity framework.
+2. *HD_framework.R* - script to plot and analyse the hidden diversity framework using the function parallelized.
 3. *D_lmer_obs-est.R* - script run the LMER model for observed and estimated diversity (Table C1)
 
 The `output` folder contains:
